@@ -3,14 +3,14 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 <script src="lib/datamaps.world.min.js"></script>
 <div id="container" style="position: relative; width: 1000px; height: 400px;"></div>
-<div id="bib">Placeholder</div>
+<div id="bib"></div>
 <script>
    var map = new Datamap({
      element: document.getElementById('container'),
 	 fills: { 
        HIGH: 'red',
 	   LOW: 'orange',
-	   defaultFill: 'lightgreen'
+	   defaultFill: 'lightgrey'
 	   },
 	 data: { <? include ('countries.php');  ColorizeCountries(); ?> },
 	 geographyConfig: {
