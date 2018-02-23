@@ -13,6 +13,14 @@
 	   defaultFill: 'lightgreen'
 	   },
 	 data: { <? include ('countries.php');  ColorizeCountries(); ?> },
+	 geographyConfig: {
+       popupTemplate: function(geo, data) {
+	   return ['<div class="hoverinfo"><strong>',
+		   'Number of citations for ' + geo.properties.name,
+		   ': ' + data.numberOfCites,
+		   '</strong></div>'].join('');
+	 }
+       },
 	 done: function(datamap) {
 	 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
 	     $.ajax({
