@@ -7,6 +7,12 @@
 <script>
    var map = new Datamap({
      element: document.getElementById('container'),
+	 fills: { 
+       HIGH: 'red',
+	   LOW: 'orange',
+	   defaultFill: 'lightgreen'
+	   },
+	 data: { <? include ('countries.php');  ColorizeCountries(); ?> },
 	 done: function(datamap) {
 	 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
 	     $.ajax({
