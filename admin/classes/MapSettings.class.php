@@ -17,6 +17,7 @@ class MapSettings
       $this->unit_fieldname = $row[0]['unit_fieldname'];
       $this->match_unit_fieldname = $row[0]['match_unit_fieldname'];
       $this->basemap_id = $row[0]['basemap_id'];
+      $this->color_scheme_id = $row[0]['color_scheme_id'];
     } catch(PDOException $exception) {
       error_log($exception->getMessage());
     }
@@ -32,11 +33,10 @@ class MapSettings
     } catch(PDOException $exception) {
       error_log($exception->getMessage());
     }
-  }
     try { 
-      $query = "SELECT colors FROM " . $this->color_scheme . " WHERE id = ?";
+      $query = "SELECT colors FROM color_schemes WHERE id = ?";
       $stmt = $db->prepare($query);
-      $stmt->execute(array($this->basemap_id));
+      $stmt->execute(array($this->color_scheme_id));
       $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
       $this->colors = preg_split('/,/', $row[0]['colors']);
     } catch(PDOException $exception) {
@@ -44,3 +44,7 @@ class MapSettings
     }
   }
 }
+
+
+
+
