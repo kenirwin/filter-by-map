@@ -33,4 +33,14 @@ class MapSettings
       error_log($exception->getMessage());
     }
   }
+    try { 
+      $query = "SELECT colors FROM " . $this->color_scheme . " WHERE id = ?";
+      $stmt = $db->prepare($query);
+      $stmt->execute(array($this->basemap_id));
+      $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $this->colors = preg_split('/,/', $row[0]['colors']);
+    } catch(PDOException $exception) {
+      error_log($exception->getMessage());
+    }
+  }
 }
