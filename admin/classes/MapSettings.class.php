@@ -131,8 +131,17 @@ class MapSettings
 	$query = 'SELECT ' . $this->table_name .'.'. $this->display_fields .' FROM '. $this->table_name .','. $this->units_table .' WHERE '. $this->units_table .'.'. $this->units_name_field .' = ? AND '.$this->unit_fieldname .' = '. $this->match_unit_fieldname;
 	$stmt = $db->prepare($query);
 	$stmt->execute(array($geo_search));
-	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	return $rows; 
+
+	/* query for column header info */
+	$stmt2 = $db->prepare($query . ' LIMIT 0');
+	$stmt2->execute(array($geo_search));
+	$headers = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+	for ($i = 0; $i < $stmt2->columnCount(); $i++) {
+	  $col = $stmt2->getColumnMeta($i);
+	  $columns[] = $col['name'];
+	}
+	$this->results_table_columns = $columns;
+	$this->data = $stmt->fetchAll(PDO::FETCH_NUM);
       } 
     catch(PDOException $exception) 
       {

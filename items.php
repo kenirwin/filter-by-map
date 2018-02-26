@@ -3,9 +3,20 @@ require_once('admin/includes/init.php');
 
 $map = new MapSettings($_REQUEST['settings_id']);
 $search_term = $map->GetCanonical($_REQUEST['geo_search']);
-$rows = $map->SearchResults($search_term,$_REQUEST['settings_id']);
-print (MysqlResultsTable($rows));
+$object = new stdClass();
+$map->SearchResults($search_term,$_REQUEST['settings_id']);
+$object->dict = $map->results_table_columns;
+$object->data = $map->data;
+print (json_encode($object));
 
+//print(json_encode(array_values($rows)));
+
+//print_r($map->results_table_columns);
+
+//print (MysqlResultsTable($rows));
+//print_r($rows);
+//print_r(array_values($rows));
+/*
 function MysqlResultsTable($rows, $table_id="results_table") { 
   $html = '';
   foreach ($rows as $row) {
@@ -25,5 +36,5 @@ function MysqlResultsTable($rows, $table_id="results_table") {
   $html = "<table $id><thead>$header</thead><tbody>$html<tbody></table>\n";
   return ($html);
 }
-
+*/
 ?>

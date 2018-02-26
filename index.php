@@ -35,8 +35,14 @@ $map = new MapSettings(1);
 	       url: 'items.php',
 		   data: { 'geo_search' : geography.properties.name, 'settings_id': 1 },
 		   success: function(result) {
-		   $('#results').html(result);
-		   $('#results table').DataTable();
+		   var obj = JSON.parse(result);
+		   console.log(obj.dict);
+		   console.log(obj.data);
+		   $('#results').DataTable({
+		     'data': obj.data,
+		       
+		     });
+		   
 		 }
 	       });
 
