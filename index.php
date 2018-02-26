@@ -35,18 +35,18 @@ $map = new MapSettings(1);
 		   data: { 'geo_search' : geography.properties.name, 'settings_id': 1 },
 		   success: function(result) {
 		   var obj = JSON.parse(result);
-		   console.log(obj.dict);
-		   console.log(obj.data);
+		   if ($.fn.dataTable.isDataTable('#results')) {
+		     
+		   }
+		   
+		   var columns = []
+		   for (i=0; i<obj.dict.length; i++) {
+		     columns.push( {'title': obj.dict[i] } )
+		   }
+
 		   $('#results').DataTable({
 		       'data': obj.data,
-		       'columns': [
-				   {title : "city"},
-				   {title: "year"}, 
-				   {title: "discipline"},
-				   {title: "gender"}, 
-				   {title: "event"}, 
-				   {title: "medal"}
-				   ]
+		       'columns': columns
 		     });
 		   
 		 }
