@@ -20,6 +20,12 @@ class MapSettings
       $this->color_scheme_id = $row[0]['color_scheme_id'];
       $this->item_label_singular = $row[0]['item_label_singular'];      
       $this->item_label_plural = $row[0]['item_label_plural'];
+      if (strlen($row[0]['display_fields']) == 0) {
+	$this->display_fields = '*';
+      }
+      else { 
+	$this->display_fields = $row[0]['display_fields'];
+      }
     } catch(PDOException $exception) {
       error_log($exception->getMessage());
     }
@@ -122,7 +128,7 @@ class MapSettings
     try
       { 
 	$db = Database::getInstance();    
-	$query = 'SELECT ' . $this->table_name . '.* FROM '. $this->table_name .','. $this->units_table .' WHERE '. $this->units_table .'.'. $this->units_name_field .' = ? AND '.$this->unit_fieldname .' = '. $this->match_unit_fieldname;
+	$query = 'SELECT ' . $this->table_name .'.'. $this->display_fields .' FROM '. $this->table_name .','. $this->units_table .' WHERE '. $this->units_table .'.'. $this->units_name_field .' = ? AND '.$this->unit_fieldname .' = '. $this->match_unit_fieldname;
 	$stmt = $db->prepare($query);
 	$stmt->execute(array($geo_search));
 	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

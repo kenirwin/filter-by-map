@@ -14,10 +14,11 @@ function MysqlResultsTable($rows, $table_id="results_table") {
     }
     $html .= " <tr>\n";
     foreach ($headers as $k) {
-      $html .= "  <td class=$k>$row[$k]</td>\n";
+      $html .= '  <td>'.$row[$k].'</td>'.PHP_EOL;
     }
     $html .= " </tr>\n";
   } // end while row
+  $headers = array_map('ucwords',$headers);
   $header = join("</th><th>",$headers);
   $header = "<tr><th>$header</th></tr>\n";
   $id = 'id="'.$table_id.'"'; 
