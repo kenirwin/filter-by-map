@@ -4,16 +4,17 @@
 <script src="lib/datamaps.world.min.js"></script>
 <div id="container" style="position: relative; width: 1000px; height: 400px;"></div>
 <div id="bib"></div>
+<? 
+   include ('units.php');  
+$color_info = ColorizeUnits(1); 
+?>
 <script>
    var map = new Datamap({
      element: document.getElementById('container'),
 	 fills: { 
-       HIGH: 'red',
-	   MEDIUM: 'darkorange',
-	   LOW: 'lightsalmon',
-	   defaultFill: 'lightgrey'
+<?=$color_info['fills'];?>
 	   },
-	 data: { <? include ('units.php');  ColorizeUnits(); ?> },
+	 data: { <?=$color_info['fill_keys'];?> },
 	 geographyConfig: {
        popupTemplate: function(geo, data) {
 	   return ['<div class="hoverinfo"><strong>',

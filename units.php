@@ -30,12 +30,12 @@ return $codes;
 
 
 
-function ColorizeUnits () {
+function ColorizeUnits ($settings_id) {
 try{ 
   $db = Database::getInstance();
   $query = 'SELECT table_name, unit_fieldname, match_unit_fieldname, units_table, return_field FROM `settings`,basemaps WHERE basemaps.id = settings.basemap_id and settings.id = ?';
   $stmt = $db->prepare($query);
-  $stmt->execute(array(1));
+  $stmt->execute(array($settings_id));
   $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
   extract($rows[0]);
   $codes = UnitCounts($table_name, $unit_fieldname, $units_table, $match_unit_fieldname, $return_field);
@@ -48,13 +48,28 @@ try{
   }
   //  print_r($codes);
 
+  $query = "SELECT colors from settings,color_schemes WHERE color_schemes.id = settings.color_scheme_id and settings.id = ?";
+  $stmt = $db->prepare($query);
+  $stmt->execute(array($settings_id));
+  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $colors = preg_split('/,/', $rows[0]['colors']);
+  $cats = sizeof($colors);
+  $divisor = floor($max/$cats);
+  
+  $fills = '';
+  for ($i=0;$i<$cats;$i++) {
+    $fills .= "\trank$i: ".$colors[$i].','.PHP_EOL;
+  }
+  
+  $fill_keys = '';
   foreach ($codes as $k => $a) {
     if ($a['n'] < 100) { $level = 'LOW'; }
     elseif ($a['n'] < 1000) { $level = 'MEDIUM'; } 
     else { $level = 'HIGH'; }
-    print $a['code'] . " : { fillKey: '$level', numberOfCites: " . $a['n'] ."},".PHP_EOL;
+    $level = "rank1";
+    $fill_keys .= $a['code'] . " : { fillKey: '$level', numberOfCites: " . $a['n'] ."},".PHP_EOL;
   }
-
+  return (array('fills'=>$fills, 'fill_keys'=>$fill_keys));
 
 
 } catch(PDOException $exception) {
