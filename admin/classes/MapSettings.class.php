@@ -31,6 +31,7 @@ class MapSettings
       $this->map_name = $row[0]['name'];
       $this->map_file = $row[0]['filename'];
       $this->units_table = $row[0]['units_table'];
+      $this->units_name_field = $row[0]['units_name_field'];
       $this->return_field = $row[0]['return_field'];
     } catch(PDOException $exception) {
       error_log($exception->getMessage());
@@ -101,6 +102,22 @@ class MapSettings
       error_log($exception->getMessage());
     }
 
+  }
+
+  public function SearchResults($geo_search, $settings_id) {
+    try
+      { 
+	$db = Database::getInstance();    
+	$query = 'SELECT ' . $this->table_name . '.* FROM '. $this->table_name .','. $this->units_table .' WHERE '. $this->units_table .'.'. $this->units_name_field .' = ? AND '.$this->unit_fieldname .' = '. $this->match_unit_fieldname;
+	$stmt = $db->prepare($query);
+	$stmt->execute(array($geo_search));
+	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	return $rows; 
+      } 
+    catch(PDOException $exception) 
+      {
+	error_log($exception->getMessage());
+      }
   }
 
 }

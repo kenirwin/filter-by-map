@@ -28,6 +28,7 @@ $map = new MapSettings(1);
        },
 	 done: function(datamap) {
 	 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+	     console.log(geography.properties);
 	     $.ajax({
 	       url: 'items.php',
 		   data: { 'geo_search' : geography.properties.name, 'settings_id': 1 },
