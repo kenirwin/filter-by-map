@@ -9,10 +9,11 @@
      element: document.getElementById('container'),
 	 fills: { 
        HIGH: 'red',
-	   LOW: 'orange',
+	   MEDIUM: 'darkorange',
+	   LOW: 'lightsalmon',
 	   defaultFill: 'lightgrey'
 	   },
-	 data: { <? include ('countries.php');  ColorizeCountries(); ?> },
+	 data: { <? include ('units.php');  ColorizeUnits(); ?> },
 	 geographyConfig: {
        popupTemplate: function(geo, data) {
 	   return ['<div class="hoverinfo"><strong>',
