@@ -34,10 +34,15 @@ $map = new MapSettings(1);
 	       url: 'items.php',
 		   data: { 'geo_search' : geography.properties.name, 'settings_id': 1 },
 		   success: function(result) {
-		   var obj = JSON.parse(result);
+		   
 		   if ($.fn.dataTable.isDataTable('#results')) {
-		     
+		     table = $('#results').DataTable();
+		     table.destroy();
 		   }
+		   
+
+
+		   var obj = JSON.parse(result);
 		   
 		   var columns = []
 		   for (i=0; i<obj.dict.length; i++) {
