@@ -1,6 +1,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
 
 <? 
 require_once('admin/includes/init.php');
@@ -9,7 +11,7 @@ $map = new MapSettings(1);
 
 <script src="lib/datamaps.world.min.js"></script>
 <div id="container" style="position: relative; width: 1000px; height: 400px; background-color: <?=$map->background_color;?>"></div>
-<div id="bib"></div>
+<div id="results"></div>
 <script>
    var map = new Datamap({
      element: document.getElementById('container'),
@@ -33,7 +35,8 @@ $map = new MapSettings(1);
 	       url: 'items.php',
 		   data: { 'geo_search' : geography.properties.name, 'settings_id': 1 },
 		   success: function(result) {
-		   $('#bib').html(result);
+		   $('#results').html(result);
+		   $('#results table').DataTable();
 		 }
 	       });
 
