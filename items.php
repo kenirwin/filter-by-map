@@ -2,7 +2,8 @@
 require_once('admin/includes/init.php');
 
 $map = new MapSettings($_REQUEST['settings_id']);
-$rows = $map->SearchResults($_REQUEST['geo_search'],$_REQUEST['settings_id']);
+$search_term = $map->GetCanonical($_REQUEST['geo_search']);
+$rows = $map->SearchResults($search_term,$_REQUEST['settings_id']);
 print (MysqlResultsTable($rows));
 
 function MysqlResultsTable($rows, $table_id="results_table") { 

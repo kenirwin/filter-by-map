@@ -103,6 +103,20 @@ class MapSettings
     }
 
   }
+  
+  public function GetCanonical($term) {
+    	$db = Database::getInstance();    
+	$query = 'SELECT canonical_name FROM unit_aliases WHERE alias = ?';
+	$stmt = $db->prepare($query);
+	$stmt->execute(array($term)); 
+	if ($stmt->rowCount() > 0) {
+	  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	  return ($rows[0]['canonical_name']);
+	}
+	else {
+	  return $term;
+	}
+  }
 
   public function SearchResults($geo_search, $settings_id) {
     try
