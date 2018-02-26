@@ -55,19 +55,20 @@ try{
   $colors = preg_split('/,/', $rows[0]['colors']);
   $cats = sizeof($colors);
   $divisor = floor($max/$cats);
-  
+  print "DIV: $divisor";
+
   $fills = '';
   for ($i=0;$i<$cats;$i++) {
-    $fills .= "\trank$i: ".$colors[$i].','.PHP_EOL;
+    $fills .= "\trank$i: '".$colors[$i]."',".PHP_EOL;
   }
   
   $fill_keys = '';
   foreach ($codes as $k => $a) {
-    if ($a['n'] < 100) { $level = 'LOW'; }
-    elseif ($a['n'] < 1000) { $level = 'MEDIUM'; } 
-    else { $level = 'HIGH'; }
-    $level = "rank1";
-    $fill_keys .= $a['code'] . " : { fillKey: '$level', numberOfCites: " . $a['n'] ."},".PHP_EOL;
+    $count = $a['n'];
+    $rank = (ceil($count/$divisor)-1);
+    if ($rank > $cats - 1) { $level = "rank".($cats-1); }
+    else { $level = "rank".$rank; }
+    $fill_keys .= $a['code'] . " : { fillKey: '$level', numberOfCites: " . $count."},".PHP_EOL;
   }
   return (array('fills'=>$fills, 'fill_keys'=>$fill_keys));
 
