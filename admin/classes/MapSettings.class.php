@@ -18,6 +18,8 @@ class MapSettings
       $this->match_unit_fieldname = $row[0]['match_unit_fieldname'];
       $this->basemap_id = $row[0]['basemap_id'];
       $this->color_scheme_id = $row[0]['color_scheme_id'];
+      $this->item_label_singular = $row[0]['item_label_singular'];      
+      $this->item_label_plural = $row[0]['item_label_plural'];
     } catch(PDOException $exception) {
       error_log($exception->getMessage());
     }
@@ -34,17 +36,21 @@ class MapSettings
       error_log($exception->getMessage());
     }
     try { 
-      $query = "SELECT colors FROM color_schemes WHERE id = ?";
+      $query = "SELECT * FROM color_schemes WHERE id = ?";
       $stmt = $db->prepare($query);
       $stmt->execute(array($this->color_scheme_id));
       $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
       $this->colors = preg_split('/,/', $row[0]['colors']);
+      $this->background_color = $row[0]['background'];
+      $this->nodata_color = $row[0]['nodata'];
+      $this->mouseover_color = $row[0]['mouseover'];
     } catch(PDOException $exception) {
       error_log($exception->getMessage());
     }
+    $this->ColorizeUnits();
   }
 
-  public function UnitCounts() {
+  private function UnitCounts() {
     try {
       $db = Database::getInstance();
       $query = 'SELECT '.$this->return_field.' as code, count(*) as n FROM '. $this->table_name .','.$this->units_table.' WHERE '.$this->units_table.'.'.$this->match_unit_fieldname.' = '.$this->table_name .'.'. $this->unit_fieldname .' group by '.$this->return_field;
@@ -57,6 +63,46 @@ class MapSettings
     }
     return $codes;
   }
+
+
+  public function ColorizeUnits() {
+    try
+      { 
+	$db = Database::getInstance();
+	$codes = $this->UnitCounts();
+	
+	foreach ($codes as $i => $a) {
+	  if (! isset($min)) { $min = $a['n']; }
+	  elseif ($a['n'] < $min) { $min = $a['n']; }
+	  if (! isset($max)) { $max = $a['n']; }
+	  elseif ($a['n'] > $max) { $max = $a['n']; }
+	}
+	//  print_r($codes);
+
+	$cats = sizeof($this->colors);
+	$divisor = floor($max/$cats);
+	
+	$fills = "defaultFill: '".$this->nodata_color."',";
+	for ($i=0;$i<$cats;$i++) {
+	  $fills .= "\trank$i: '".$this->colors[$i]."',".PHP_EOL;
+	}
+	
+	$fill_keys = '';
+	foreach ($codes as $k => $a) {
+	  $count = $a['n'];
+	  $rank = (ceil($count/$divisor)-1);
+	  if ($rank > $cats - 1) { $level = "rank".($cats-1); }
+	  else { $level = "rank".$rank; }
+	  $fill_keys .= $a['code'] . " : { fillKey: '$level', numberOfCites: " . $count."},".PHP_EOL;
+	}
+	$this->fills = $fills;
+	$this->fillKeys = $fill_keys;
+      } catch(PDOException $exception) {
+      error_log($exception->getMessage());
+    }
+
+  }
+
 }
 
 
