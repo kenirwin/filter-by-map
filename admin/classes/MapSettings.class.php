@@ -43,6 +43,20 @@ class MapSettings
       error_log($exception->getMessage());
     }
   }
+
+  public function UnitCounts() {
+    try {
+      $db = Database::getInstance();
+      $query = 'SELECT '.$this->return_field.' as code, count(*) as n FROM '. $this->table_name .','.$this->units_table.' WHERE '.$this->units_table.'.'.$this->match_unit_fieldname.' = '.$this->table_name .'.'. $this->unit_fieldname .' group by '.$this->return_field;
+      $stmt = $db->query($query);
+      $codes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      //  print_r($codes);
+    } catch(PDOException $exception) {
+      error_log($exception->getMessage());
+      $codes = array();
+    }
+    return $codes;
+  }
 }
 
 
