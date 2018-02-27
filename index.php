@@ -11,6 +11,7 @@ $map = new MapSettings(1);
 
 <script src="lib/datamaps.world.min.js"></script>
 <div id="container" style="position: relative; width: 1000px; height: 400px; background-color: <?=$map->background_color;?>"></div>
+<div id="results_info"></div>
 <table id="results"></table>
 <script>
    var map = new Datamap({
@@ -30,6 +31,7 @@ $map = new MapSettings(1);
        },
 	 done: function(datamap) {
 	 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+	     $('#results_info').html('<h2>Results for: '+geography.properties.name+'</h2>');
 	     $.ajax({
 	       url: 'items.php',
 		   data: { 'geo_search' : geography.properties.name, 'settings_id': 1 },
