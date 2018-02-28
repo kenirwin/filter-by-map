@@ -5,7 +5,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
 
 <? 
-require_once('admin/includes/init.php');
+require_once('includes/init.php');
 $map = new MapSettings(1);
 ?>
 
