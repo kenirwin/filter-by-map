@@ -16,6 +16,6 @@ class Config
         SMTP_PASS = '',
         SMTP_PORT = 587, // try 25 (unsecured) if that doesn't work
         SMTP_SENDER = 'from@example.com',
-        REDIR_PATH = ''; //http path for your app, eg. /path/app
+        APP_PATH = ''; //http path for your app, eg. /path/app
 
 }

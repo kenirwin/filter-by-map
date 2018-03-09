@@ -179,7 +179,7 @@ class Auth
         $_SESSION['return_to'] = $url;
       }
 
-      Util::redirect('/login.php');
+      Util::redirect(Config::APP_PATH.'/login.php');
     }
   }
 
@@ -212,7 +212,7 @@ class Auth
       if ($user->startPasswordReset()) {
 
         // Note hardcoded protocol
-	$path = Config::REDIR_PATH;
+	$path = Config::APP_PATH;
         $url = 'http://'.$_SERVER['HTTP_HOST'].$path.'/reset_password.php?token=' . $user->password_reset_token;
 
         $body = <<<EOT

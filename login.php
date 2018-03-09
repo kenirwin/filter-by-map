@@ -9,7 +9,7 @@ require_once('includes/init.php');
 
 // Require the user to NOT be logged in before they can see this page.
 Auth::getInstance()->requireGuest();
-
+print_r($_SESSION);
 // Get checked status of the "remember me" checkbox
 $remember_me = isset($_POST['remember_me']);
 
